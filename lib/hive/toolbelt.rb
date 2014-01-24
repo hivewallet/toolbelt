@@ -21,7 +21,7 @@ module Hive
 
         create_manifest(config)
         copy_default_icon
-        create_index_html
+        create_index_html config[:name]
       end
 
       no_commands do
@@ -49,8 +49,10 @@ module Hive
           copy_file File.join('images', 'icon.png'), 'icon.png'
         end
 
-        def create_index_html
-          copy_file File.join('html', 'index.html'), 'index.html'
+        def create_index_html title
+          index_filename = 'index.html'
+          copy_file File.join('html', index_filename), index_filename
+          gsub_file index_filename, /{{title}}/, title
         end
       end
     end

@@ -58,8 +58,14 @@ module Hive::Toolbelt
       let(:filename) { 'index.html' }
 
       it 'creates an index.html' do
-        cli.create_index_html
+        cli.create_index_html ''
         expect(File.exists?(filename)).to be_true
+      end
+
+      it 'has app name in title' do
+        cli.create_index_html 'Foo App'
+        index = File.read(filename)
+        expect(index).to include('<title>Foo App</title>')
       end
 
       after do
