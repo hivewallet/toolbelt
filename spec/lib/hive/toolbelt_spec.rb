@@ -12,10 +12,26 @@ module Hive::Toolbelt
         expect(File.exists?(filename))
       end
 
-      it 'created manifest file has the specified config' do
-        config = { "foo" => 1, "bar" => 2 }
+      def create_manifest_json config
         cli.create_manifest config
-        expect(JSON.parse File.read(filename)).to eq config
+        JSON.parse File.read(filename)
+      end
+
+      it 'created manifest file has the specified config' do
+        config = { foo: 1, bar: 2 }
+        manifest = create_manifest_json config
+        config.each do |k, v|
+          expect(manifest[k.to_s]).to eq v
+        end
+      end
+
+      it 'generates additional required fields' do
+        config = { name: "Foo App", author: "Wei Lu" }
+        manifest = create_manifest_json config
+
+        expect(manifest["version"]).to eq("0.0.1")
+        expect(manifest["icon"]).to eq("icon.png")
+        expect(manifest["id"]).to eq("wei_lu.foo_app")
       end
 
       after do

@@ -2,7 +2,10 @@
 
 require "thor"
 require "json"
+require "active_support/core_ext/string"
 require_relative "toolbelt/version"
+
+I18n.enforce_available_locales = false
 
 module Hive
   module Toolbelt
@@ -21,9 +24,20 @@ module Hive
 
       no_commands do
         def create_manifest config={}
+          defaults = {
+            version: "0.0.1",
+            icon: "icon.png",
+            id: id_for(config[:author], config[:name])
+          }
+
           File.open('manifest.json', 'w') do |f|
-            f.puts(JSON.pretty_generate config)
+            f.puts(JSON.pretty_generate config.clone.merge(defaults))
           end
+        end
+
+        def id_for author, name
+          return "" if author.blank? || name.blank?
+          "#{author.parameterize('_')}.#{name.parameterize('_')}"
         end
       end
     end
