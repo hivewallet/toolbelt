@@ -52,5 +52,19 @@ module Hive::Toolbelt
         File.delete filename if File.exists?(filename)
       end
     end
+
+    describe '#create_index_html' do
+      let(:cli) { described_class.new }
+      let(:filename) { 'index.html' }
+
+      it 'creates an index.html' do
+        cli.create_index_html
+        expect(File.exists?(filename)).to be_true
+      end
+
+      after do
+        File.delete filename if File.exists?(filename)
+      end
+    end
   end
 end

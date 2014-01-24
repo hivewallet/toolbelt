@@ -21,9 +21,13 @@ module Hive
 
         create_manifest(config)
         copy_default_icon
+        create_index_html
       end
 
       no_commands do
+        include Thor::Actions
+        source_paths << 'assets'
+
         def create_manifest config={}
           defaults = {
             version: "0.0.1",
@@ -41,10 +45,12 @@ module Hive
           "#{author.parameterize('_')}.#{name.parameterize('_')}"
         end
 
-        include Thor::Actions
         def copy_default_icon
-          source_paths << 'assets'
           copy_file File.join('images', 'icon.png'), 'icon.png'
+        end
+
+        def create_index_html
+          copy_file File.join('html', 'index.html'), 'index.html'
         end
       end
     end
