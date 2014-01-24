@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 
 require "thor"
 require "json"
@@ -20,6 +20,7 @@ module Hive
         config[:repo_url] = ask("Git Repository URL: ")
 
         create_manifest(config)
+        copy_default_icon
       end
 
       no_commands do
@@ -38,6 +39,12 @@ module Hive
         def id_for author, name
           return "" if author.blank? || name.blank?
           "#{author.parameterize('_')}.#{name.parameterize('_')}"
+        end
+
+        include Thor::Actions
+        def copy_default_icon
+          source_paths << 'assets'
+          copy_file 'images/icon.png', './icon.png'
         end
       end
     end

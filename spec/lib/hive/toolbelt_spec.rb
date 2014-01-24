@@ -9,7 +9,7 @@ module Hive::Toolbelt
 
       it 'creates a manifest file' do
         cli.create_manifest
-        expect(File.exists?(filename))
+        expect(File.exists?(filename)).to be_true
       end
 
       def create_manifest_json config
@@ -32,6 +32,20 @@ module Hive::Toolbelt
         expect(manifest["version"]).to eq("0.0.1")
         expect(manifest["icon"]).to eq("icon.png")
         expect(manifest["id"]).to eq("wei_lu.foo_app")
+      end
+
+      after do
+        File.delete filename if File.exists?(filename)
+      end
+    end
+
+    describe '#copy_default_icon' do
+      let(:cli) { described_class.new }
+      let(:filename) { 'icon.png' }
+
+      it 'provides a default icon file' do
+        cli.copy_default_icon
+        expect(File.exists?(filename)).to be_true
       end
 
       after do
