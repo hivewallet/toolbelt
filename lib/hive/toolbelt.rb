@@ -44,7 +44,7 @@ module Hive
         include Thor::Actions
         def copy_default_icon
           source_paths << 'assets'
-          copy_file 'images/icon.png', './icon.png'
+          copy_file File.join('images', 'icon.png'), 'icon.png'
         end
       end
     end
