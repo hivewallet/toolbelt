@@ -8,9 +8,9 @@ Gem::Specification.new do |spec|
   spec.version       = Hive::Toolbelt::VERSION
   spec.authors       = ["Wei Lu"]
   spec.email         = ["luwei.here@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
-  spec.homepage      = ""
+  spec.summary       = %q{Command Line Interface for the Hive wallet}
+  spec.description   = %q{All you need for developing Hive apps.}
+  spec.homepage      = "https://github.com/hivewallet/toolbelt"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
