@@ -34,10 +34,6 @@ module Hive::Toolbelt
         expect(manifest["icon"]).to eq("icon.png")
         expect(manifest["id"]).to eq("wei_lu.foo_app")
       end
-
-      after do
-        File.delete filename if File.exists?(filename)
-      end
     end
 
     describe '#copy_default_icon' do
@@ -47,10 +43,6 @@ module Hive::Toolbelt
       it 'provides a default icon file' do
         cli.copy_default_icon
         expect(File.exists?(filename)).to be_true
-      end
-
-      after do
-        File.delete filename if File.exists?(filename)
       end
     end
 
@@ -67,10 +59,6 @@ module Hive::Toolbelt
         cli.create_index_html 'Foo App'
         index = File.read(filename)
         expect(index).to include('<title>Foo App</title>')
-      end
-
-      after do
-        File.delete filename if File.exists?(filename)
       end
     end
 
@@ -91,10 +79,6 @@ module Hive::Toolbelt
         File.read(filename)
       end
 
-      before do
-        FileUtils.mv(filename, "#{filename}.tmp") if File.exists?(filename)
-      end
-
       it 'creates a README.md' do
         cli.create_readme(config)
         expect(File.exists?(filename)).to be_true
@@ -105,16 +89,6 @@ module Hive::Toolbelt
       it { expect(readme).to include("cd #{project_name}") }
       it { expect(readme).to include("ln -s ~/#{project_name}/ wei_lu.foo_app") }
       it { expect(readme).to include("git clone #{config[:repo_url]}") }
-
-      after do
-        if File.exists?(filename)
-          if File.exists?("#{filename}.tmp")
-            FileUtils.mv( "#{filename}.tmp", filename)
-          else
-            File.delete(filename)
-          end
-        end
-      end
     end
   end
 end

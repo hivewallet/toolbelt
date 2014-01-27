@@ -6,4 +6,21 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.filter_run :focus
   config.order = 'random'
+
+  # clean up generated files
+  generated_files = %w(manifest.json icon.png index.html README.md)
+  config.before do
+    generated_files.each do |filename|
+      FileUtils.mv(filename, "#{filename}.tmp") if File.exists?(filename)
+    end
+  end
+  config.after do
+    generated_files.each do |filename|
+      if File.exists?("#{filename}.tmp")
+        FileUtils.mv( "#{filename}.tmp", filename)
+      elsif File.exists?(filename)
+        File.delete(filename)
+      end
+    end
+  end
 end
