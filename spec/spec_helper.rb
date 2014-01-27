@@ -9,6 +9,7 @@ RSpec.configure do |config|
 
   # clean up generated files
   generated_files = %w(manifest.json icon.png index.html README.md LICENSE.txt)
+  generated_files << File.join('javascripts', 'hiveapp-api-mock.js')
   config.before do
     generated_files.each do |filename|
       FileUtils.mv(filename, "#{filename}.tmp") if File.exists?(filename)

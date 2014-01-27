@@ -46,9 +46,22 @@ module Hive::Toolbelt
       end
     end
 
+    describe '#copy_api_mock' do
+      let(:cli) { described_class.new }
+
+      it 'provides a mock api for in-browser development' do
+        cli.copy_api_mock
+        expect(File.exists?(File.join('javascripts', 'hiveapp-api-mock.js'))).to be_true
+      end
+    end
+
     describe '#create_index_html' do
       let(:cli) { described_class.new }
       let(:filename) { 'index.html' }
+      let(:index) do
+        cli.create_index_html 'Foo App'
+        File.read(filename)
+      end
 
       it 'creates an index.html' do
         cli.create_index_html ''
@@ -56,9 +69,11 @@ module Hive::Toolbelt
       end
 
       it 'has app name in title' do
-        cli.create_index_html 'Foo App'
-        index = File.read(filename)
         expect(index).to include('<title>Foo App</title>')
+      end
+
+      it 'includes hive mock api' do
+        expect(index).to include('<script src="javascripts/hiveapp-api-mock.js"></script>')
       end
     end
 

@@ -21,6 +21,7 @@ module Hive
 
         create_manifest(config)
         copy_default_icon
+        copy_api_mock # for in-browser development
         create_index_html config[:name]
         create_readme config
         create_license config[:author]
@@ -49,6 +50,11 @@ module Hive
 
         def copy_default_icon
           copy_file File.join('images', 'icon.png'), 'icon.png'
+        end
+
+        def copy_api_mock
+          filename = File.join('javascripts', 'hiveapp-api-mock.js')
+          copy_file filename, filename
         end
 
         def create_index_html title
