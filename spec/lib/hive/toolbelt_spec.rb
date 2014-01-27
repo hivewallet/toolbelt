@@ -90,5 +90,23 @@ module Hive::Toolbelt
       it { expect(readme).to include("ln -s ~/#{project_name}/ wei_lu.foo_app") }
       it { expect(readme).to include("git clone #{config[:repo_url]}") }
     end
+
+    describe '#create_license' do
+      let(:cli) { described_class.new }
+      let(:filename) { 'LICENSE.txt' }
+      let(:author) { 'Wei Lu' }
+      let(:license) do
+        cli.create_license author
+        File.read(filename)
+      end
+
+      it 'creates a license file' do
+        cli.create_license author
+        expect(File.exists?(filename)).to be_true
+      end
+
+      it { expect(license).to include(author) }
+      it { expect(license).to include(Time.now.year.to_s) }
+    end
   end
 end

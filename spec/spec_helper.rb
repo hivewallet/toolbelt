@@ -8,7 +8,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   # clean up generated files
-  generated_files = %w(manifest.json icon.png index.html README.md)
+  generated_files = %w(manifest.json icon.png index.html README.md LICENSE.txt)
   config.before do
     generated_files.each do |filename|
       FileUtils.mv(filename, "#{filename}.tmp") if File.exists?(filename)

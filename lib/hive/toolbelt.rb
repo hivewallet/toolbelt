@@ -23,6 +23,7 @@ module Hive
         copy_default_icon
         create_index_html config[:name]
         create_readme config
+        create_license config[:author]
       end
 
       no_commands do
@@ -76,6 +77,13 @@ module Hive
           return if repo_url.blank?
 
           repo_url.split('/').last.gsub(/.git$/, '')
+        end
+
+        def create_license author
+          license_filename = 'LICENSE.txt'
+          copy_file license_filename, license_filename
+          safe_gsub_file license_filename, /{{year}}/, Time.now.year.to_s
+          safe_gsub_file license_filename, /{{author}}/, author
         end
       end
     end
