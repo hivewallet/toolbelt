@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require "thor"
 require "json"
 require "active_support"
@@ -29,7 +27,7 @@ module Hive
 
       no_commands do
         include Thor::Actions
-        source_paths << 'assets'
+        self.source_paths << File.join(File.dirname(__FILE__), '..', '..', '..', 'assets')
 
         def create_manifest config={}
           defaults = {
@@ -96,4 +94,3 @@ module Hive
   end
 end
 
-Hive::Toolbelt::CLI.start

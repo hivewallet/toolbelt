@@ -1,1 +1,5 @@
-../lib/hive/toolbelt/cli.rb
+#!/usr/bin/env ruby
+
+require_relative '../lib/hive/toolbelt'
+
+Hive::Toolbelt::CLI.start
