@@ -8,7 +8,7 @@ Command Line Interface for the Hive wallet
 
 ## Usage
 
-    $ hive init     # (TODO) walk you through scaffolding a Hive app
+    $ hive init     # walk you through scaffolding a Hive app
     $ hive package  # (TODO) cleans and creates a .hiveapp bundle from current working directory
     $ hive release  # (TODO) bumps version, tags and pushes
 
