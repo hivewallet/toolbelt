@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'toolbelt'
+require 'fileutils'
 
 module Hive::Toolbelt
   describe CLI do
@@ -70,6 +71,49 @@ module Hive::Toolbelt
 
       after do
         File.delete filename if File.exists?(filename)
+      end
+    end
+
+    describe '#create_readme' do
+      let(:cli) { described_class.new }
+      let(:filename) { 'README.md' }
+      let(:project_name) { 'toolbelt' }
+      let(:config) do
+        {
+          name: "Foo App",
+          description: "Super awesome foo app",
+          author: "Wei Lu",
+          repo_url: "git@github.com:hivewallet/#{project_name}.git"
+        }
+      end
+      let(:readme) do
+        cli.create_readme config
+        File.read(filename)
+      end
+
+      before do
+        FileUtils.mv(filename, "#{filename}.tmp") if File.exists?(filename)
+      end
+
+      it 'creates a README.md' do
+        cli.create_readme(config)
+        expect(File.exists?(filename)).to be_true
+      end
+
+      it { expect(readme).to include(config[:name]) }
+      it { expect(readme).to include(config[:description]) }
+      it { expect(readme).to include("cd #{project_name}") }
+      it { expect(readme).to include("ln -s ~/#{project_name}/ wei_lu.foo_app") }
+      it { expect(readme).to include("git clone #{config[:repo_url]}") }
+
+      after do
+        if File.exists?(filename)
+          if File.exists?("#{filename}.tmp")
+            FileUtils.mv( "#{filename}.tmp", filename)
+          else
+            File.delete(filename)
+          end
+        end
       end
     end
   end

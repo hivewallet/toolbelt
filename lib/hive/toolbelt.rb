@@ -22,6 +22,7 @@ module Hive
         create_manifest(config)
         copy_default_icon
         create_index_html config[:name]
+        create_readme config
       end
 
       no_commands do
@@ -53,6 +54,28 @@ module Hive
           index_filename = 'index.html'
           copy_file File.join('html', index_filename), index_filename
           gsub_file index_filename, /{{title}}/, title
+        end
+
+        def create_readme config
+          readme_filename = 'README.md'
+          copy_file readme_filename, readme_filename
+          safe_gsub_file readme_filename, /{{name}}/, config[:name]
+          safe_gsub_file readme_filename, /{{description}}/, config[:description]
+          safe_gsub_file readme_filename, /{{app_id}}/, id_for(config[:author], config[:name])
+          safe_gsub_file readme_filename, /{{repo_url}}/, config[:repo_url]
+          safe_gsub_file readme_filename, /{{project_name}}/, project_name_from(config[:repo_url])
+        end
+
+        def safe_gsub_file filename, pattern, replacement
+          return if replacement.blank?
+
+          gsub_file filename, pattern, replacement
+        end
+
+        def project_name_from repo_url
+          return if repo_url.blank?
+
+          repo_url.split('/').last.gsub(/.git$/, '')
         end
       end
     end
