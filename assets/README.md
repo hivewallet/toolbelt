@@ -18,6 +18,8 @@
     cd ~/Library/Application\ Support/Hive/Applications/
     ln -s ~/{{project_name}}/ {{app_id}}
 
+Go to Hive menu "Tools" > "Debugging Tools" > "Rebuild application list".
+
 ## Contributing
 
 1. Fork it
