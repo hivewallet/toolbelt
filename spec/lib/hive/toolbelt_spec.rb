@@ -123,5 +123,17 @@ module Hive::Toolbelt
       it { expect(license).to include(author) }
       it { expect(license).to include(Time.now.year.to_s) }
     end
+
+    describe '#create_empty_folders' do
+      let(:cli) { described_class.new }
+
+
+      %w(stylesheets images fonts).each do |dirname|
+        it "creates #{dirname} folder" do
+          cli.create_empty_folders
+          expect(File.exists?(File.join(dirname, '.gitignore'))).to be_true
+        end
+      end
+    end
   end
 end

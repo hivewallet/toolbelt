@@ -23,6 +23,7 @@ module Hive
         create_index_html config[:name]
         create_readme config
         create_license config[:author]
+        create_empty_folders
       end
 
       no_commands do
@@ -88,6 +89,12 @@ module Hive
           copy_file license_filename, license_filename
           safe_gsub_file license_filename, /{{year}}/, Time.now.year.to_s
           safe_gsub_file license_filename, /{{author}}/, author
+        end
+
+        def create_empty_folders
+          %w(stylesheets images fonts).each do |dirname|
+            create_file File.join(dirname, '.gitignore')
+          end
         end
       end
     end
