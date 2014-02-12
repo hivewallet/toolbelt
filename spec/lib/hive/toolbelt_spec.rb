@@ -8,13 +8,16 @@ module Hive::Toolbelt
       let(:cli) { described_class.new }
       let(:filename) { 'manifest.json' }
 
-      it 'creates a manifest file' do
-        cli.create_manifest
-        expect(File.exists?(filename)).to be_true
-      end
-
       def create_manifest_json config
-        cli.create_manifest config
+        default = {
+          name: "",
+          description: "",
+          author: "",
+          contact: "",
+          repo_url: "",
+          accessedHosts: ""
+        }
+        cli.create_manifest default.merge(config)
         JSON.parse File.read(filename)
       end
 
@@ -33,6 +36,24 @@ module Hive::Toolbelt
         expect(manifest["version"]).to eq("0.0.1")
         expect(manifest["icon"]).to eq("icon.png")
         expect(manifest["id"]).to eq("wei_lu.foo_app")
+      end
+
+      describe 'accessedHosts' do
+        context 'when not specified' do
+          it 'has `[]` as value for accessedHosts' do
+            manifest = create_manifest_json({ accessedHosts: '' })
+
+            expect(manifest["accessedHosts"]).to eq([])
+          end
+        end
+
+        context 'when specified' do
+          it 'populates accessedHosts with an array' do
+            manifest = create_manifest_json({ accessedHosts: 'api.github.com, www.bitstamp.net' })
+
+            expect(manifest["accessedHosts"]).to eq(['api.github.com', 'www.bitstamp.net'])
+          end
+        end
       end
     end
 

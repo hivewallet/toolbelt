@@ -16,6 +16,7 @@ module Hive
         config[:author] = ask("Author Name: ")
         config[:contact] = ask("Author Contact: ")
         config[:repo_url] = ask("Git Repository URL: ")
+        config[:accessedHosts] = ask("API hosts the app needs to talk to (separated by comma. e.g. api.github.com, www.bitstamp.net): ")
 
         create_manifest(config)
         copy_default_icon
@@ -34,11 +35,13 @@ module Hive
           defaults = {
             version: "0.0.1",
             icon: "icon.png",
-            id: id_for(config[:author], config[:name])
+            id: id_for(config[:author], config[:name]),
+            accessedHosts: []
           }
 
           File.open('manifest.json', 'w') do |f|
-            f.puts(JSON.pretty_generate config.clone.merge(defaults))
+            config[:accessedHosts] = config[:accessedHosts].split(',').map(&:strip)
+            f.puts(JSON.pretty_generate defaults.merge(config))
           end
         end
 
