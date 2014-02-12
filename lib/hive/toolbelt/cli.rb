@@ -35,13 +35,12 @@ module Hive
           defaults = {
             version: "0.0.1",
             icon: "icon.png",
-            id: id_for(config[:author], config[:name]),
-            accessedHosts: []
+            id: id_for(config[:author], config[:name])
           }
 
           File.open('manifest.json', 'w') do |f|
             config[:accessedHosts] = config[:accessedHosts].split(',').map(&:strip)
-            f.puts(JSON.pretty_generate defaults.merge(config))
+            f.puts(JSON.pretty_generate config.merge(defaults))
           end
         end
 
