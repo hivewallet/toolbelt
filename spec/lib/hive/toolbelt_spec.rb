@@ -14,7 +14,7 @@ module Hive::Toolbelt
           description: "",
           author: "",
           contact: "",
-          repo_url: "",
+          repoURL: "",
           accessedHosts: ""
         }
         cli.create_manifest default.merge(config)

@@ -15,7 +15,7 @@ module Hive
         config[:description] = ask("Description: ")
         config[:author] = ask("Author Name: ")
         config[:contact] = ask("Author Contact: ")
-        config[:repo_url] = ask("Git Repository URL: ")
+        config[:repoURL] = ask("Git Repository URL: ")
         config[:accessedHosts] = ask("API hosts the app needs to talk to (separated by comma. e.g. api.github.com, www.bitstamp.net): ")
 
         create_manifest(config)
