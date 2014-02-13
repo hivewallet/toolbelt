@@ -154,10 +154,9 @@ module Hive::Toolbelt
 
       context 'when any of the required files is missing' do
         %w(index.html manifest.json).each do |filename|
-          it "raises error when #{filename} is not found" do
-            expect {
-              cli.package
-            }.to raise_error(PackageError)
+          it "prints error when #{filename} is not found" do
+            expect(cli).to receive(:say).with(anything, :red)
+            cli.package
           end
         end
       end

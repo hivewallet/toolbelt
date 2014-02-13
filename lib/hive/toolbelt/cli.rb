@@ -36,6 +36,9 @@ module Hive
 
         bundle_name = bundle_name_from_manifest(File.join directory, 'manifest.json')
         bundle_files bundle_name, directory
+
+      rescue PackageError => e
+        say e.message, :red
       end
 
       no_commands do
