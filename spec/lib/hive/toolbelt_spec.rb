@@ -178,6 +178,15 @@ module Hive::Toolbelt
           cli.package
           expect(Zip::File.new(filename).find_entry '.git/').to be_nil
         end
+
+        context 'when there already exists a packaged file' do
+          it "overwrites it without raising error" do
+            cli.package
+            expect {
+              cli.package
+            }.to_not raise_error
+          end
+        end
       end
     end
   end

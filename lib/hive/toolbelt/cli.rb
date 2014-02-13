@@ -35,6 +35,7 @@ module Hive
         check_for_required_files directory
 
         bundle_name = bundle_name_from_manifest(File.join directory, 'manifest.json')
+        FileUtils.rm(bundle_name) if File.exists? bundle_name
         bundle_files bundle_name, directory
 
         say "#{bundle_name} packaged successfully", :green
