@@ -8,7 +8,7 @@ RSpec.configure do |config|
   config.order = 'random'
 
   # clean up generated files
-  generated_files = %w(manifest.json icon.png index.html README.md LICENSE.txt)
+  generated_files = %w(manifest.json icon.png index.html README.md LICENSE.txt wei-lu-my-app-1-0-1.hiveapp)
   generated_files << File.join('javascripts', 'hiveapp-api-mock.js')
   %w(stylesheets images fonts).each do |dirname|
     generated_files << File.join(dirname, '.gitignore')

@@ -2,6 +2,8 @@ require "thor"
 require "json"
 require "active_support"
 require "active_support/core_ext/string"
+require "active_support/core_ext/hash"
+require "zip"
 
 I18n.enforce_available_locales = false
 
@@ -25,6 +27,24 @@ module Hive
         create_readme config
         create_license config[:author]
         create_empty_folders
+      end
+
+      desc "package [DIR_NAME]", "package a directory into a .hiveapp bundle. DIR_NAME defaults to current working directory if not specified."
+      def package dir_name='.'
+        directory = File.expand_path dir_name
+        directory += File::SEPARATOR unless directory.ends_with?(File::SEPARATOR)
+        %w(index.html manifest.json).each do |filename|
+          if Dir.glob(File.join dir_name, filename).empty?
+            raise "#{filename} is required. But it's not found under #{directory}"
+          end
+        end
+
+        bundle_name = bundle_name_from_manifest(File.join directory, 'manifest.json')
+        Zip::File.open(bundle_name, Zip::File::CREATE) do |zipfile|
+          Dir[File.join(directory, '**', '**')].each do |file|
+            zipfile.add(file.sub(directory, ''), file)
+          end
+        end
       end
 
       no_commands do
@@ -97,6 +117,17 @@ module Hive
           %w(stylesheets images fonts).each do |dirname|
             create_file File.join(dirname, '.gitignore')
           end
+        end
+
+        def bundle_name_from_manifest manifest
+          config = JSON.parse(File.read manifest).with_indifferent_access
+          required = config.values_at :author, :name, :version
+
+          required.each do |r|
+            raise "Please provide a value for #{r} field in manifest.json" if r.blank?
+          end
+
+          required.join(' ').parameterize << '.hiveapp'
         end
       end
     end

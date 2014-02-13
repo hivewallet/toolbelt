@@ -148,5 +148,30 @@ module Hive::Toolbelt
         end
       end
     end
+
+    describe '#pacakge' do
+      let(:filename) { 'wei-lu-my-app-1-0-1.hiveapp' }
+
+      context 'when any of the required files is missing' do
+        %w(index.html manifest.json).each do |filename|
+          it "raises error when #{filename} is not found" do
+            expect {
+              cli.package
+            }.to raise_error
+          end
+        end
+      end
+
+      context 'when required files are found' do
+        it "produces the bundled file" do
+          FileUtils.touch 'index.html'
+          File.open('manifest.json', 'w') do |f|
+            f.puts(JSON.pretty_generate name: 'My App', author: 'Wei Lu', version: '1.0.1')
+          end
+          cli.package
+          expect(File.exists?(filename)).to be_true
+        end
+      end
+    end
   end
 end
