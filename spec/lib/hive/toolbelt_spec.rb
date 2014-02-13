@@ -4,8 +4,9 @@ require 'fileutils'
 
 module Hive::Toolbelt
   describe CLI do
+    let(:cli) { described_class.new }
+
     describe '#create_manifest' do
-      let(:cli) { described_class.new }
       let(:filename) { 'manifest.json' }
 
       def create_manifest_json config
@@ -58,7 +59,6 @@ module Hive::Toolbelt
     end
 
     describe '#copy_default_icon' do
-      let(:cli) { described_class.new }
       let(:filename) { 'icon.png' }
 
       it 'provides a default icon file' do
@@ -68,8 +68,6 @@ module Hive::Toolbelt
     end
 
     describe '#copy_api_mock' do
-      let(:cli) { described_class.new }
-
       it 'provides a mock api for in-browser development' do
         cli.copy_api_mock
         expect(File.exists?(File.join('javascripts', 'hiveapp-api-mock.js'))).to be_true
@@ -77,7 +75,6 @@ module Hive::Toolbelt
     end
 
     describe '#create_index_html' do
-      let(:cli) { described_class.new }
       let(:filename) { 'index.html' }
       let(:index) do
         cli.create_index_html 'Foo App'
@@ -99,7 +96,6 @@ module Hive::Toolbelt
     end
 
     describe '#create_readme' do
-      let(:cli) { described_class.new }
       let(:filename) { 'README.md' }
       let(:project_name) { 'toolbelt' }
       let(:config) do
@@ -128,7 +124,6 @@ module Hive::Toolbelt
     end
 
     describe '#create_license' do
-      let(:cli) { described_class.new }
       let(:filename) { 'LICENSE.txt' }
       let(:author) { 'Wei Lu' }
       let(:license) do
@@ -146,9 +141,6 @@ module Hive::Toolbelt
     end
 
     describe '#create_empty_folders' do
-      let(:cli) { described_class.new }
-
-
       %w(stylesheets images fonts).each do |dirname|
         it "creates #{dirname} folder" do
           cli.create_empty_folders
