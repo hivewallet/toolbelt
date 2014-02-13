@@ -25,6 +25,12 @@ Command Line Interface for the Hive wallet
 - provides a default icon
 - generates basic app structure. Read more on [app structure](https://github.com/hivewallet/hive-osx/wiki/How-to-build-a-Hive-app#wiki-app-structure)
 - includes a [mock Hive API](https://github.com/javgh/hiveapp-api-mock/blob/v1.0.1/hiveapp-api-mock.js) for in-browser development & testing
+ 
+### hive package
+
+`hive package [DIR_NAME]` packages a directory into a .hiveapp bundle. `DIR_NAME` defaults to current working directory if not specified. Regardless of `DIR_NAME`, the generated `.hiveapp` bundle is always located at current working directory.
+
+Note that the command deliberately exclude all .hidden files and directories, like `.git`, when generating the bundle. 
 
 ## Contributing
 
