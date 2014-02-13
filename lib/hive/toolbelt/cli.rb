@@ -121,13 +121,13 @@ module Hive
 
         def bundle_name_from_manifest manifest
           config = JSON.parse(File.read manifest).with_indifferent_access
-          required = config.values_at :author, :name, :version
+          required = config.slice :author, :name, :version
 
-          required.each do |r|
-            raise "Please provide a value for #{r} field in manifest.json" if r.blank?
+          required.each do |k, v|
+            raise "Please provide a value for `#{k}` field in manifest.json" if v.blank?
           end
 
-          required.join(' ').parameterize << '.hiveapp'
+          required.values.join(' ').parameterize << '.hiveapp'
         end
       end
     end
