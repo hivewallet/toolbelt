@@ -8,7 +8,7 @@ I18n.enforce_available_locales = false
 module Hive
   module Toolbelt
     class CLI < Thor
-      desc "init", "scaffolding a Hive app"
+      desc "init", "scaffold a Hive app"
       def init
         config = {}
         config[:name] = ask("App Name: ")
