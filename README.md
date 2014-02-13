@@ -12,6 +12,20 @@ Command Line Interface for the Hive wallet
     $ hive package  # creates a .hiveapp bundle from specified or current working directory (.hidden files ignored)
     $ hive release  # (TODO) bumps version, tags and pushes
 
+### hive init
+
+    $ mkdir new_app
+    $ cd new_app
+    $ hive init
+
+`hive init` asks questions and scaffolds a Hive app. It
+
+- creates manifest.json. Read more on [manifest configuration](https://github.com/hivewallet/hive-osx/wiki/How-to-build-a-Hive-app#wiki-manifest-file) 
+- creates a skeleton index.html. Read more on [index.html](https://github.com/hivewallet/hive-osx/wiki/How-to-build-a-Hive-app#wiki-index-page)
+- provides a default icon
+- generates basic app structure. Read more on [app structure](https://github.com/hivewallet/hive-osx/wiki/How-to-build-a-Hive-app#wiki-app-structure)
+- includes a [mock Hive API](https://github.com/javgh/hiveapp-api-mock/blob/v1.0.1/hiveapp-api-mock.js) for in-browser development & testing
+
 ## Contributing
 
 1. Fork it ( http://github.com/hivewallet/hive-toolbelt/fork )
