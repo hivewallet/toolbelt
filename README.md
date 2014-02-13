@@ -9,7 +9,7 @@ Command Line Interface for the Hive wallet
 ## Usage
 
     $ hive init     # walk you through scaffolding a Hive app
-    $ hive package  # (TODO) cleans and creates a .hiveapp bundle from current working directory
+    $ hive package  # creates a .hiveapp bundle from specified or current working directory (.hidden files ignored)
     $ hive release  # (TODO) bumps version, tags and pushes
 
 ## Contributing
