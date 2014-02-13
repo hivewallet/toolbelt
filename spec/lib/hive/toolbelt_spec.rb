@@ -157,7 +157,7 @@ module Hive::Toolbelt
           it "raises error when #{filename} is not found" do
             expect {
               cli.package
-            }.to raise_error
+            }.to raise_error(PackageError)
           end
         end
       end

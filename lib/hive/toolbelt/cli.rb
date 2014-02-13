@@ -35,7 +35,7 @@ module Hive
         directory += File::SEPARATOR unless directory.ends_with?(File::SEPARATOR)
         %w(index.html manifest.json).each do |filename|
           if Dir.glob(File.join dir_name, filename).empty?
-            raise "#{filename} is required. But it's not found under #{directory}"
+            raise PackageError.new("#{filename} is required. But it's not found under #{directory}")
           end
         end
 
@@ -124,7 +124,7 @@ module Hive
           required = config.slice :author, :name, :version
 
           required.each do |k, v|
-            raise "Please provide a value for `#{k}` field in manifest.json" if v.blank?
+            raise PackageError.new("Please provide a value for `#{k}` field in manifest.json") if v.blank?
           end
 
           required.values.join(' ').parameterize << '.hiveapp'
