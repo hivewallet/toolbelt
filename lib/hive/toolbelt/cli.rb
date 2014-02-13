@@ -31,20 +31,11 @@ module Hive
 
       desc "package [DIR_NAME]", "package a directory into a .hiveapp bundle. DIR_NAME defaults to current working directory if not specified."
       def package dir_name='.'
-        directory = File.expand_path dir_name
-        directory += File::SEPARATOR unless directory.ends_with?(File::SEPARATOR)
-        %w(index.html manifest.json).each do |filename|
-          if Dir.glob(File.join dir_name, filename).empty?
-            raise PackageError.new("#{filename} is required. But it's not found under #{directory}")
-          end
-        end
+        directory = sanitize_dir_name dir_name
+        check_for_required_files directory
 
         bundle_name = bundle_name_from_manifest(File.join directory, 'manifest.json')
-        Zip::File.open(bundle_name, Zip::File::CREATE) do |zipfile|
-          Dir[File.join(directory, '**', '**')].each do |file|
-            zipfile.add(file.sub(directory, ''), file)
-          end
-        end
+        bundle_files bundle_name, directory
       end
 
       no_commands do
@@ -116,6 +107,28 @@ module Hive
         def create_empty_folders
           %w(stylesheets images fonts).each do |dirname|
             create_file File.join(dirname, '.gitignore')
+          end
+        end
+
+        def sanitize_dir_name dir_name
+          directory = File.expand_path dir_name
+          directory << File::SEPARATOR unless directory.ends_with?(File::SEPARATOR)
+          directory
+        end
+
+        def check_for_required_files sanitized_dir_name
+          %w(index.html manifest.json).each do |filename|
+            if Dir.glob(File.join sanitized_dir_name, filename).empty?
+              raise PackageError.new("#{filename} is required. But it's not found under #{sanitized_dir_name}")
+            end
+          end
+        end
+
+        def bundle_files bundle_name, directory
+          Zip::File.open(bundle_name, Zip::File::CREATE) do |zipfile|
+            Dir[File.join(directory, '**', '**')].each do |file|
+              zipfile.add(file.sub(directory, ''), file)
+            end
           end
         end
 
