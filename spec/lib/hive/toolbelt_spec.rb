@@ -163,13 +163,21 @@ module Hive::Toolbelt
       end
 
       context 'when required files are found' do
-        it "produces the bundled file" do
+        before do
           FileUtils.touch 'index.html'
           File.open('manifest.json', 'w') do |f|
             f.puts(JSON.pretty_generate name: 'My App', author: 'Wei Lu', version: '1.0.1')
           end
+        end
+
+        it "produces the bundled file" do
           cli.package
           expect(File.exists?(filename)).to be_true
+        end
+
+        it "exclude the .git directory (and all hidden files)" do
+          cli.package
+          expect(Zip::File.new(filename).find_entry '.git/').to be_nil
         end
       end
     end
