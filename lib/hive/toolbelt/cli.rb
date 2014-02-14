@@ -10,6 +10,12 @@ I18n.enforce_available_locales = false
 module Hive
   module Toolbelt
     class CLI < Thor
+      MANIFEST = "manifest.json"
+      INDEX = "index.html"
+      ICON = "icon.png"
+      README = "README.md"
+      LICENSE = "MIT-LICENSE.txt"
+
       desc "init", "scaffold a Hive app"
       def init
         config = {}
@@ -34,7 +40,7 @@ module Hive
         directory = sanitize_dir_name dir_name
         check_for_required_files directory
 
-        bundle_name = bundle_name_from_manifest(File.join directory, 'manifest.json')
+        bundle_name = bundle_name_from_manifest(File.join directory, MANIFEST)
         FileUtils.rm(bundle_name) if File.exists? bundle_name
         bundle_files bundle_name, directory
 
@@ -50,11 +56,11 @@ module Hive
         def create_manifest config={}
           defaults = {
             version: "0.0.1",
-            icon: "icon.png",
+            icon: ICON,
             id: id_for(config[:author], config[:name])
           }
 
-          File.open('manifest.json', 'w') do |f|
+          File.open(MANIFEST, 'w') do |f|
             config[:accessedHosts] = config[:accessedHosts].split(',').map(&:strip)
             f.puts(JSON.pretty_generate config.merge(defaults))
           end
@@ -66,7 +72,7 @@ module Hive
         end
 
         def copy_default_icon
-          copy_file File.join('images', 'icon.png'), 'icon.png'
+          copy_file File.join('images', ICON), ICON
         end
 
         def copy_api_mock
@@ -75,19 +81,17 @@ module Hive
         end
 
         def create_index_html title
-          index_filename = 'index.html'
-          copy_file File.join('html', index_filename), index_filename
-          gsub_file index_filename, /{{title}}/, title
+          copy_file File.join('html', INDEX), INDEX
+          gsub_file INDEX, /{{title}}/, title
         end
 
         def create_readme config
-          readme_filename = 'README.md'
-          copy_file readme_filename, readme_filename
-          safe_gsub_file readme_filename, /{{name}}/, config[:name]
-          safe_gsub_file readme_filename, /{{description}}/, config[:description]
-          safe_gsub_file readme_filename, /{{app_id}}/, id_for(config[:author], config[:name])
-          safe_gsub_file readme_filename, /{{repo_url}}/, config[:repo_url]
-          safe_gsub_file readme_filename, /{{project_name}}/, project_name_from(config[:repo_url])
+          copy_file README, README
+          safe_gsub_file README, /{{name}}/, config[:name]
+          safe_gsub_file README, /{{description}}/, config[:description]
+          safe_gsub_file README, /{{app_id}}/, id_for(config[:author], config[:name])
+          safe_gsub_file README, /{{repo_url}}/, config[:repo_url]
+          safe_gsub_file README, /{{project_name}}/, project_name_from(config[:repo_url])
         end
 
         def safe_gsub_file filename, pattern, replacement
@@ -103,10 +107,9 @@ module Hive
         end
 
         def create_license author
-          license_filename = 'MIT-LICENSE.txt'
-          copy_file license_filename, license_filename
-          safe_gsub_file license_filename, /{{year}}/, Time.now.year.to_s
-          safe_gsub_file license_filename, /{{author}}/, author
+          copy_file LICENSE, LICENSE
+          safe_gsub_file LICENSE, /{{year}}/, Time.now.year.to_s
+          safe_gsub_file LICENSE, /{{author}}/, author
         end
 
         def create_empty_folders
@@ -122,7 +125,7 @@ module Hive
         end
 
         def check_for_required_files sanitized_dir_name
-          %w(index.html manifest.json).each do |filename|
+          [INDEX, MANIFEST].each do |filename|
             if Dir.glob(File.join sanitized_dir_name, filename).empty?
               raise PackageError.new("#{filename} is required. But it's not found under #{sanitized_dir_name}")
             end
@@ -142,7 +145,7 @@ module Hive
           required = config.slice :author, :name, :version
 
           required.each do |k, v|
-            raise PackageError.new("Please provide a value for `#{k}` field in manifest.json") if v.blank?
+            raise PackageError.new("Please provide a value for `#{k}` field in #{MANIFEST}") if v.blank?
           end
 
           required.values.join(' ').parameterize << '.hiveapp'
