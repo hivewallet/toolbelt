@@ -36,7 +36,7 @@ module Hive::Toolbelt
 
         expect(manifest["version"]).to eq("0.0.1")
         expect(manifest["icon"]).to eq("icon.png")
-        expect(manifest["id"]).to eq("wei_lu.foo_app")
+        expect(manifest["id"]).to eq("wei-lu.foo-app")
       end
 
       describe 'accessedHosts' do
@@ -119,7 +119,7 @@ module Hive::Toolbelt
       it { expect(readme).to include(config[:name]) }
       it { expect(readme).to include(config[:description]) }
       it { expect(readme).to include("cd #{project_name}") }
-      it { expect(readme).to include("ln -s ~/#{project_name}/ wei_lu.foo_app") }
+      it { expect(readme).to include("ln -s ~/#{project_name}/ wei-lu.foo-app") }
       it { expect(readme).to include("git clone #{config[:repo_url]}") }
     end
 

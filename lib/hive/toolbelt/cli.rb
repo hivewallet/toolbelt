@@ -62,7 +62,7 @@ module Hive
 
         def id_for author, name
           return "" if author.blank? || name.blank?
-          "#{author.parameterize('_')}.#{name.parameterize('_')}"
+          "#{author.parameterize}.#{name.parameterize}"
         end
 
         def copy_default_icon
