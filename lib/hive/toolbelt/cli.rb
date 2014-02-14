@@ -103,7 +103,7 @@ module Hive
         end
 
         def create_license author
-          license_filename = 'LICENSE.txt'
+          license_filename = 'MIT-LICENSE.txt'
           copy_file license_filename, license_filename
           safe_gsub_file license_filename, /{{year}}/, Time.now.year.to_s
           safe_gsub_file license_filename, /{{author}}/, author

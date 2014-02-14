@@ -124,7 +124,7 @@ module Hive::Toolbelt
     end
 
     describe '#create_license' do
-      let(:filename) { 'LICENSE.txt' }
+      let(:filename) { 'MIT-LICENSE.txt' }
       let(:author) { 'Wei Lu' }
       let(:license) do
         cli.create_license author
