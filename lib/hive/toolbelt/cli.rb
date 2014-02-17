@@ -90,8 +90,8 @@ module Hive
           safe_gsub_file README, /{{name}}/, config[:name]
           safe_gsub_file README, /{{description}}/, config[:description]
           safe_gsub_file README, /{{app_id}}/, id_for(config[:author], config[:name])
-          safe_gsub_file README, /{{repo_url}}/, config[:repo_url]
-          safe_gsub_file README, /{{project_name}}/, project_name_from(config[:repo_url])
+          safe_gsub_file README, /{{repo_url}}/, config[:repoURL]
+          safe_gsub_file README, /{{project_name}}/, project_name_from(config[:repoURL])
         end
 
         def safe_gsub_file filename, pattern, replacement

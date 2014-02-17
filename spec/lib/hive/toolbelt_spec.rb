@@ -103,7 +103,7 @@ module Hive::Toolbelt
           name: "Foo App",
           description: "Super awesome foo app",
           author: "Wei Lu",
-          repo_url: "git@github.com:hivewallet/#{project_name}.git"
+          repoURL: "git@github.com:hivewallet/#{project_name}.git"
         }
       end
       let(:readme) do
@@ -120,7 +120,7 @@ module Hive::Toolbelt
       it { expect(readme).to include(config[:description]) }
       it { expect(readme).to include("cd #{project_name}") }
       it { expect(readme).to include("ln -s ~/#{project_name}/ wei-lu.foo-app") }
-      it { expect(readme).to include("git clone #{config[:repo_url]}") }
+      it { expect(readme).to include("git clone #{config[:repoURL]}") }
     end
 
     describe '#create_license' do
