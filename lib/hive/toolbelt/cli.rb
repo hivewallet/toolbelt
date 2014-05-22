@@ -4,6 +4,7 @@ require "active_support"
 require "active_support/core_ext/string"
 require "active_support/core_ext/hash"
 require "zip"
+require "webrick"
 
 I18n.enforce_available_locales = false
 
@@ -45,6 +46,18 @@ module Hive
         bundle_files bundle_name, directory
 
         say "#{bundle_name} packaged successfully", :green
+      rescue PackageError => e
+        say e.message, :red
+      end
+
+      desc "serve [PORT] [DIR_NAME]", "serve a directory as a .hiveapp bundle by setting up a local registry. PORT defaults to 8888, DIR_NAME defaults to the current working directory."
+      def serve port=8888, dir_name='.'
+        directory = sanitize_dir_name dir_name
+        check_for_required_files directory
+
+        manifest = File.join directory, MANIFEST
+        bundle_name = bundle_name_from_manifest manifest
+        start_registry port, manifest, directory, bundle_name
       rescue PackageError => e
         say e.message, :red
       end
@@ -149,6 +162,34 @@ module Hive
           end
 
           required.values.join(' ').parameterize << '.hiveapp'
+        end
+
+        def start_registry port, manifest, directory, bundle_name
+          config = JSON.parse(File.read manifest).with_indifferent_access
+          raise PackageError.new("Please provide an id in the manifest") unless config.include? :id
+          raise PackageError.new("Please set an icon in the manifest") unless config.include? :icon
+          id = config[:id]
+          icon_path = config[:icon]
+          icon_file = File.join directory, icon_path
+
+          server = WEBrick::HTTPServer.new :Port => port
+          trap 'INT' do server.shutdown end
+          server.mount_proc '/index.json' do |req, res|
+            res.keep_alive = false
+            res.content_type = 'text/json'
+            res.body = "[" + (File.read manifest) + "]"
+          end
+          server.mount_proc ('/' + id + '.hiveapp') do |req, res|
+            FileUtils.rm(bundle_name) if File.exists? bundle_name
+            bundle_files bundle_name, directory
+            res.keep_alive = false
+            res.body = File.read bundle_name
+          end
+          server.mount_proc ('/' + id + '/' + icon_path) do |req, res|
+            res.keep_alive = false
+            res.body = File.read icon_file
+          end
+          server.start
         end
       end
     end

@@ -10,6 +10,7 @@ Command Line Interface for the Hive wallet
 
     $ hive init     # walk you through scaffolding a Hive app
     $ hive package  # creates a .hiveapp bundle from specified or current working directory (.hidden files ignored)
+    $ hive serve    # serve current working directory as a .hiveapp bundle by starting a registry server
     $ hive release  # (TODO) bumps version, tags and pushes
 
 ### hive init
